@@ -87,7 +87,7 @@ func EditaProduto(id string) Produto {
 		var nome, descricao string
 		var preco float64
 
-		err = produtoDoBanco.Scan(&id, &nome, &descricao, &quantidade, &preco)
+		err = produtoDoBanco.Scan(&id, &nome, &descricao, &preco, &quantidade)
 		if err != nil {
 			panic(err.Error())
 		}

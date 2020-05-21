@@ -15,6 +15,7 @@ func CheckError(e error) {
 
 func CheckErrorMsg(e error, msg string) {
 	if e != nil {
-		log.Println(msg, " => ", e)
+		log.Printf(`[ERRO]: %s:%d %s => %s`, fn, line, msg, e)
+		// log.Println(msg, " => ", e)
 	}
 }

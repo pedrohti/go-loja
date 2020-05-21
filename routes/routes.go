@@ -3,7 +3,7 @@ package routes
 import (
 	"net/http"
 
-	"github.com/pedrohti/loja/controllers"
+	"github.com/pedrohti/go-loja/controllers"
 )
 
 func CarregaRotas() {

@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/pedrohti/loja/routes"
+	"github.com/pedrohti/go-loja/routes"
 )
 
 func main() {

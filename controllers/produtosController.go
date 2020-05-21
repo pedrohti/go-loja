@@ -2,11 +2,11 @@ package controllers
 
 import (
 	"html/template"
-	"log"
 	"net/http"
 	"strconv"
 
-	"github.com/pedrohti/loja/models"
+	"github.com/pedrohti/go-loja/errors"
+	"github.com/pedrohti/go-loja/models"
 )
 
 var temp = template.Must(template.ParseGlob("templates/*.html"))
@@ -29,14 +29,11 @@ func Insert(w http.ResponseWriter, r *http.Request) {
 		quantidade := r.FormValue("quantidade")
 
 		precoConvertido, err := strconv.ParseFloat(preco, 64)
-		if err != nil {
-			log.Println("Erro ao converter o preço: ", err)
-		}
+		errors.CheckErrorMsg(err, "Erro ao converter o preço")
 
 		quantidadeConvertida, err := strconv.Atoi(quantidade)
-		if err != nil {
-			log.Println("Erro ao converter a quantidade: ", err)
-		}
+		errors.CheckErrorMsg(err, "Erro ao converter a quantidade")
+
 		models.CriarNovoProduto(nome, descricao, precoConvertido, quantidadeConvertida)
 	}
 	http.Redirect(w, r, "/", 301)
@@ -60,13 +57,10 @@ func Update(w http.ResponseWriter, r *http.Request) {
 		nome := r.FormValue("nome")
 		descricao := r.FormValue("descricao")
 		preco, err := strconv.ParseFloat((r.FormValue("preco")), 64)
-		if err != nil {
-			log.Println("Erro ao converter o preço: ", err)
-		}
+		errors.CheckErrorMsg(err, "Erro ao converter o preço")
+
 		quantidade, err := strconv.Atoi(r.FormValue("quantidade"))
-		if err != nil {
-			log.Println("Erro ao converter a quantidade: ", err)
-		}
+		errors.CheckErrorMsg(err, "Erro ao converter a quantidade")
 
 		models.AtualizaProduto(id, nome, descricao, preco, quantidade)
 

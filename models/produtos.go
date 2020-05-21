@@ -1,7 +1,8 @@
 package models
 
 import (
-	"github.com/pedrohti/loja/db"
+	"github.com/pedrohti/go-loja/db"
+	"github.com/pedrohti/go-loja/errors"
 )
 
 type Produto struct {
@@ -16,9 +17,7 @@ func BuscaTodosOsProdutos() []Produto {
 	db := db.ConectaComBancoDeDados()
 
 	selectProdutos, err := db.Query("SELECT * FROM Produtos ORDER BY id asc")
-	if err != nil {
-		panic(err.Error())
-	}
+	errors.CheckError(err)
 
 	p := Produto{}
 	produtos := []Produto{}
@@ -29,9 +28,7 @@ func BuscaTodosOsProdutos() []Produto {
 		var preco float64
 
 		err = selectProdutos.Scan(&id, &nome, &descricao, &preco, &quantidade)
-		if err != nil {
-			panic(err.Error())
-		}
+		errors.CheckError(err)
 
 		p.Id = id
 		p.Nome = nome
@@ -50,9 +47,7 @@ func CriarNovoProduto(nome, descricao string, preco float64, quantidade int) {
 	db := db.ConectaComBancoDeDados()
 
 	insereDadosNoBanco, err := db.Prepare("INSERT INTO Produtos(nome, descricao, preco, quantidade) VALUES ($1, $2, $3, $4)")
-	if err != nil {
-		panic(err.Error())
-	}
+	errors.CheckError(err)
 
 	insereDadosNoBanco.Exec(nome, descricao, preco, quantidade)
 
@@ -63,9 +58,7 @@ func DeletaProduto(id string) {
 	db := db.ConectaComBancoDeDados()
 
 	deletarOProduto, err := db.Prepare("DELETE FROM Produtos WHERE id=$1")
-	if err != nil {
-		panic(err.Error())
-	}
+	errors.CheckError(err)
 
 	deletarOProduto.Exec(id)
 
@@ -76,9 +69,7 @@ func EditaProduto(id string) Produto {
 	db := db.ConectaComBancoDeDados()
 
 	produtoDoBanco, err := db.Query("SELECT * FROM Produtos WHERE id=$1", id)
-	if err != nil {
-		panic(err.Error())
-	}
+	errors.CheckError(err)
 
 	produtoParaAtualizar := Produto{}
 
@@ -88,9 +79,7 @@ func EditaProduto(id string) Produto {
 		var preco float64
 
 		err = produtoDoBanco.Scan(&id, &nome, &descricao, &preco, &quantidade)
-		if err != nil {
-			panic(err.Error())
-		}
+		errors.CheckError(err)
 
 		produtoParaAtualizar.Id = id
 		produtoParaAtualizar.Nome = nome
@@ -106,9 +95,7 @@ func AtualizaProduto(id string, nome, descricao string, preco float64, quantidad
 	db := db.ConectaComBancoDeDados()
 
 	atualizaProduto, err := db.Prepare("UPDATE Produtos set nome=$1, descricao=$2, preco=$3, quantidade=$4 WHERE id=$5")
-	if err != nil {
-		panic(err.Error())
-	}
+	errors.CheckError(err)
 
 	atualizaProduto.Exec(nome, descricao, preco, quantidade, id)
 
